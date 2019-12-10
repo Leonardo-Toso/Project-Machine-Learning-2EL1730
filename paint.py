@@ -4,9 +4,10 @@ import os
 import glob
 
 def paint(img_path,x1,y1,x2,y2,x3,y3,x4,y4):
-	img = cv2.imread(img_path,0)
-	colunas,linhas = img.shape
-	img=cv2.rectangle(img,(0,0),(int(colunas),int(linhas*0.35)),(0,0,0),-1)
+	img = cv2.imread(img_path)
+	colunas,linhas,layer = img.shape
+	img=cv2.rectangle(img,(0,0),(int(colunas),int(linhas*0.35)),(0,255,0),-1)
+	print(img[1][10][1])
 	#left
 	a = (y1-y2)/(x1-x2)
 	b = y1 - a*x1
@@ -20,10 +21,12 @@ def paint(img_path,x1,y1,x2,y2,x3,y3,x4,y4):
 		posY2 =int( (a2*x+b2) )
 		#print(x,posY)
 		if((posY<linhas) ): #descending curve, inverse
-			img[x][:posY] = np.zeros(posY)
+			img[x][:posY][:] = np.zeros((1,posY,3))
+			img[x][:posY] = np.asarray([0,255,0])
 			
 		if((posY2<linhas)):
-			img[x][posY2:] = np.zeros(linhas-posY2)
+			img[x][posY2:] = np.asarray([0,0,0])
+			img[x][posY2:] = np.asarray([0,255,0])
 	cv2.imwrite (img_path,img)
 	
 
